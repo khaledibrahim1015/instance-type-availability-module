@@ -4,8 +4,7 @@ provider "aws" {
 }
 
 
-# This file is used to define the main configuration for the AWS instance type availability module.
-
+# This file is used to define the main configuration for the AWS instance type availability module. It includes data sources to retrieve the current AWS region and the availability zones in that region, filtered by opt-in status. The outputs provide the current region and the list of availability zones found. The module is designed to be flexible, allowing users to specify which opt-in statuses to include when filtering availability zones.
 #  data source to retrieve the current AWS region.
 data "aws_region" "current-region" {}
 
@@ -18,3 +17,42 @@ data "aws_availability_zones" "availability-azs" {
     }  
 }
 
+
+# Check if that respective Instance Type is supported in that Specific Region in list of availability Zones
+# Get the List of Availability Zones in a Particular region where that respective Instance Type is supported
+# for_each = toset(data.aws_availability_zones.available.names)
+# terraform will loop through the list of availability zones and check if that respective instance type is supported in that availability zone or not and return the list of availability zones where that respective instance type is supported
+# and create a map of availability zones and the respective instance type offerings in that availability zone
+#  {
+#   "us-east-1a" = <data object>
+#   "us-east-1b" = <data object>
+#   "us-east-1c" = <data object>
+# }
+
+
+ # For each combination of (AZ, instance_type), query AWS for offering support.
+ # Key format: "<az>|<instance_type>" keeps the map flat and avoids nested for_each.
+locals {
+  # Cartesian product: az × instance_type
+  az_instance_pairs = {
+    # example output : "us-east-1a|t3.micro" => { az = "us-east-1a", instance_type = "t3.micro" }
+    for pair in setproduct(
+      data.aws_availability_zones.availability-azs.names,
+      var.instance_types
+    ) : "${pair[0]}|${pair[1]}" => { az = pair[0], instance_type = pair[1] }
+  }
+}
+
+
+data "aws_ec2_instance_type_offerings" "this" {
+    for_each = local.az_instance_pairs
+    location_type = "availability-zone"
+    filter {
+        name   = "instance-type"
+        values = [each.value.instance_type]
+     }
+    filter {
+        name   = "location"
+        values = [each.value.az]
+    }
+}

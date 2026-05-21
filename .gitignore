@@ -1,3 +1,13 @@
 .terraform.lock.hcl
-.terraform/providers/registry.terraform.io/hashicorp/aws/6.46.0/darwin_arm64/LICENSE.txt
-.terraform/providers/registry.terraform.io/hashicorp/aws/6.46.0/darwin_arm64/terraform-provider-aws_v6.46.0_x5
+.terraform/*
+*.tfstate
+*.tfstate.backup
+.terraform.tfstate
+.terraform.tfstate.backup
+*.tfvars
+*.tfvars.json
+*.tfvars.yaml
+*.tfvars.yml
+*.tfvars.tfvars
+*.tfvars.tfvars.json
+*.tfvars.tfvars.yaml        

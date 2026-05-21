@@ -15,3 +15,14 @@ variable "opt_in_status" {
   }
 }
 
+
+
+variable "instance_types" {
+   description = "List of instance types to check for availability."
+   type = list(string)
+    default = ["t3.micro"]
+    validation {
+    condition = length(var.instance_types) > 0
+    error_message = "At least one instance type must be specified."
+    }
+}
