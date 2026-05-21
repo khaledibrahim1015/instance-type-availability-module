@@ -11,10 +11,10 @@ func TestInstanceTypeAvailabilityModule(t *testing.T) {
 	t.Parallel()
 
 	opts := &terraform.Options{
-		TerraformDir: "../examples",
-		Vars: map[string]interface{}{
-			"instance_types": []string{"t3.micro"},
-		},
+		TerraformDir: "../example",
+		// Vars: map[string]interface{}{
+		// 	"instance_types": []string{"t3.micro"},
+		// },
 		EnvVars: map[string]string{
 			"AWS_DEFAULT_REGION": "us-east-1",
 		},

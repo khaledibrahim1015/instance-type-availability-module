@@ -11,3 +11,5 @@
 *.tfvars.tfvars
 *.tfvars.tfvars.json
 *.tfvars.tfvars.yaml        
+example/.terraform/providers/registry.terraform.io/hashicorp/aws/6.46.0/darwin_arm64/LICENSE.txt
+example/.terraform/providers/registry.terraform.io/hashicorp/aws/6.46.0/darwin_arm64/terraform-provider-aws_v6.46.0_x5
